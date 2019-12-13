@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
-import routes from './routes'
+import routes from './routes/index'
 
 class Server {
   private app: express.Application
@@ -28,7 +28,9 @@ class Server {
   }
 
   private routes (): void {
-    this.app.use(routes)
+    for (const route in routes) {
+      this.app.use(routes[route])
+    }
   }
 
   public start (): void {
