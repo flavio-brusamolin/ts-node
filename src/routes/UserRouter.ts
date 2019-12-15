@@ -13,8 +13,9 @@ class UserRouter {
 
   private setRoutes (): void {
     this.routes.get(this.endpoint, UserController.list)
-    this.routes.post(this.endpoint, Validator.applyRules(this.endpoint), Validator.validate, UserController.store)
-    // this.routes.delete(`${this.endpoint}/:id`, UserController.delete)
+    this.routes.post(this.endpoint, Validator.applyRules(this.endpoint, 'store'), Validator.validate, UserController.store)
+    this.routes.put(`${this.endpoint}/:id`, Validator.applyRules(this.endpoint, 'update'), Validator.validate, UserController.update)
+    this.routes.delete(`${this.endpoint}/:id`, Validator.applyRules(this.endpoint, 'delete'), Validator.validate, UserController.delete)
   }
 }
 

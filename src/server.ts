@@ -23,6 +23,8 @@ class Server {
   private database (): void {
     mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
       useUnifiedTopology: true
     })
   }

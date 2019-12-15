@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import User from '../models/User'
+import UserInterface from '../utils/interfaces/UserInterface'
 
 class UserController {
   public async list (req: Request, res: Response): Promise<Response> {
@@ -14,79 +15,75 @@ class UserController {
   public async store (req: Request, res: Response): Promise<Response> {
     const { name, email, password, role } = req.body
 
-    const user = await User.findOne({ email })
-
-    if (user) {
-      return res.status(400).json({
-        success: false,
-        message: 'User email already exists'
-      })
-    }
-
-    await User.create({
+    const user: UserInterface = {
       name,
       email,
       password,
       role
-    })
+    }
 
-    return res.status(201).json({
-      success: true,
-      message: 'Successful registration'
-    })
+    try {
+      await User.create(user)
+
+      return res.status(201).json({
+        success: true,
+        message: 'Successful registration'
+      })
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        errors: [{ email: 'User email already exists' }]
+      })
+    }
   }
 
-  // public async delete (req: Request, res: Response): Promise<Response> {
-  //   const { id } = req.params
+  public async update (req: Request, res: Response): Promise<Response> {
+    const { id } = req.params
+    const { name, email, password, role } = req.body
 
-  //   // validate id
+    const user: UserInterface = {}
+    if (email) user.email = email
+    if (name) user.name = name
+    if (password) user.password = password
+    if (role) user.role = role
 
-  //   const user = await User.findByIdAndDelete(id)
-  //   if (!user) {
-  //     return res.status(400).json({
-  //       success: false,
-  //       message: 'User not found'
-  //     })
-  //   }
+    try {
+      const result = await User.findByIdAndUpdate(id, user)
+      if (!result) {
+        return res.status(400).json({
+          success: false,
+          errors: [{ id: 'User id not found' }]
+        })
+      }
 
-  //   return res.status(200).json({
-  //     success: true,
-  //     message: 'Successful deletion'
-  //   })
-  // }
+      return res.status(200).json({
+        success: true,
+        message: 'Successful update'
+      })
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        errors: [{ email: 'User email already exists' }]
+      })
+    }
+  }
 
-  // public async update (req: Request, res: Response): Promise<Response> {
-  //   const { id } = req.params
-  //   const { name, email, password, role } = req.body
+  public async delete (req: Request, res: Response): Promise<Response> {
+    const { id } = req.params
 
-  //   // validate id and params
+    const result = await User.findByIdAndDelete(id)
+    if (!result) {
+      return res.status(400).json({
+        success: false,
+        errors: [{ id: 'User id not found' }]
+      })
+    }
 
-  //   if (await User.findOne({ email })) {
-  //     return res.status(400).json({
-  //       success: false,
-  //       message: 'User email already exists'
-  //     })
-  //   }
-
-  //   const user = await User.findByIdAndUpdate(id, {
-  //     name,
-  //     email,
-  //     password,
-  //     role
-  //   })
-
-  //   if (!user) {
-  //     return res.status(400).json({
-  //       success: false,
-  //       message: 'User not found'
-  //     })
-  //   }
-
-  //   return res.status(200).json({
-  //     success: true,
-  //     message: 'Successful update'
-  //   })
-  // }
+    return res.status(200).json({
+      success: true,
+      message: 'Successful deletion'
+    })
+  }
 }
 
 export default new UserController()

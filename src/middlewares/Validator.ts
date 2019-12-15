@@ -3,8 +3,8 @@ import { ValidationChain, validationResult } from 'express-validator'
 import RulesManager from '../config/RulesManager'
 
 class Validator {
-  public applyRules (endpoint: string): Array<ValidationChain> {
-    return RulesManager.getRules(endpoint)
+  public applyRules (endpoint: string, operation: string): Array<ValidationChain> {
+    return RulesManager.getRules(endpoint, operation)
   }
 
   public validate (req: Request, res: Response, next: NextFunction): Response|void {

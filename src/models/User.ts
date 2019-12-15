@@ -1,6 +1,8 @@
 import { Schema, model, Document } from 'mongoose'
+import uniqueValidator from 'mongoose-unique-validator'
 
-interface UserInterface extends Document {
+interface User extends Document {
+  _id: string,
   name: string,
   email: string,
   password: string,
@@ -10,25 +12,17 @@ interface UserInterface extends Document {
 }
 
 const UserSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
+  name: String,
   email: {
     type: String,
-    required: true
+    unique: true
   },
-  password: {
-    type: String,
-    required: true
-  },
-  role: {
-    type: String,
-    required: true,
-    enum: ['admin', 'user']
-  }
+  password: String,
+  role: String
 }, {
   timestamps: true
 })
 
-export default model<UserInterface>('User', UserSchema)
+UserSchema.plugin(uniqueValidator, { message: 'User {PATH} already exists' })
+
+export default model<User>('User', UserSchema)
