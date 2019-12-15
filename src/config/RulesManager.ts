@@ -4,6 +4,7 @@ class RulesManager {
   public getRules (endpoint: string, operation: string): Array<ValidationChain> {
     switch (endpoint) {
       case '/users': return this.userRules(operation)
+      case '/auth': return this.authRules(operation)
     }
   }
 
@@ -12,19 +13,19 @@ class RulesManager {
       case 'store':
         return [
           body('name')
-            .notEmpty().withMessage('Required field'),
+            .notEmpty().withMessage('Name is a required field'),
 
           body('email')
-            .notEmpty().withMessage('Required field')
-            .isEmail().withMessage('Invalid e-mail'),
+            .notEmpty().withMessage('Email is a required field')
+            .isEmail().withMessage('Invalid email'),
 
           body('password')
-            .notEmpty().withMessage('Required field')
-            .isLength({ min: 6 }).withMessage('Must be at least 6 characters'),
+            .notEmpty().withMessage('Password is a required field')
+            .isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
 
           body('role')
-            .notEmpty().withMessage('Required field')
-            .isIn(['user', 'admin']).withMessage('Must be admin or user')
+            .notEmpty().withMessage('Role is a required field')
+            .isIn(['user', 'admin']).withMessage('Role must be admin or user')
         ]
 
       case 'update':
@@ -37,15 +38,15 @@ class RulesManager {
 
           body('email')
             .optional()
-            .isEmail().withMessage('Invalid e-mail'),
+            .isEmail().withMessage('Invalid email'),
 
           body('password')
             .optional()
-            .isLength({ min: 6 }).withMessage('Must be at least 6 characters'),
+            .isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
 
           body('role')
             .optional()
-            .isIn(['user', 'admin']).withMessage('Must be admin or user')
+            .isIn(['user', 'admin']).withMessage('Role must be admin or user')
         ]
 
       case 'delete':
@@ -53,6 +54,27 @@ class RulesManager {
           param('id')
             .isMongoId().withMessage('Invalid Id')
         ]
+
+      default:
+        return []
+    }
+  }
+
+  private authRules (operation: string): Array<ValidationChain> {
+    switch (operation) {
+      case 'authenticate':
+        return [
+          body('email')
+            .notEmpty().withMessage('Email is a required field')
+            .isEmail().withMessage('Invalid email'),
+
+          body('password')
+            .notEmpty().withMessage('Password is a required field')
+            .isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+        ]
+
+      default:
+        return []
     }
   }
 }

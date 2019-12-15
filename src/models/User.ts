@@ -2,7 +2,6 @@ import { Schema, model, Document } from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 
 interface User extends Document {
-  _id: string,
   name: string,
   email: string,
   password: string,
@@ -12,13 +11,23 @@ interface User extends Document {
 }
 
 const UserSchema = new Schema({
-  name: String,
+  name: {
+    type: String,
+    trim: true
+  },
   email: {
     type: String,
+    trim: true,
     unique: true
   },
-  password: String,
-  role: String
+  password: {
+    type: String,
+    trim: true
+  },
+  role: {
+    type: String,
+    trim: true
+  }
 }, {
   timestamps: true
 })

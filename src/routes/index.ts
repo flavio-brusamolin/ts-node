@@ -1,5 +1,7 @@
 import userRoutes from './UserRouter'
+import authRoutes from './AuthRouter'
 
 export default {
-  userRoutes
+  userRoutes,
+  authRoutes
 }

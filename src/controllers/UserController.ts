@@ -32,7 +32,10 @@ class UserController {
     } catch (error) {
       return res.status(400).json({
         success: false,
-        errors: [{ email: 'User email already exists' }]
+        errors: [{
+          title: 'Email validation failed',
+          message: 'User email already exists'
+        }]
       })
     }
   }
@@ -52,7 +55,10 @@ class UserController {
       if (!result) {
         return res.status(400).json({
           success: false,
-          errors: [{ id: 'User id not found' }]
+          errors: [{
+            title: 'Id validation failed',
+            message: 'User id not found'
+          }]
         })
       }
 
@@ -63,7 +69,10 @@ class UserController {
     } catch (error) {
       return res.status(400).json({
         success: false,
-        errors: [{ email: 'User email already exists' }]
+        errors: [{
+          title: 'Email validation failed',
+          message: 'User email already exists'
+        }]
       })
     }
   }
@@ -75,7 +84,10 @@ class UserController {
     if (!result) {
       return res.status(400).json({
         success: false,
-        errors: [{ id: 'User id not found' }]
+        errors: [{
+          title: 'Id validation failed',
+          message: 'User id not found'
+        }]
       })
     }
 

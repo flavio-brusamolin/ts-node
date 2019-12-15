@@ -16,10 +16,13 @@ class Validator {
 
     const prettyErrors: Array<object> = []
     errors.array().map(err => {
-      prettyErrors.push({ [err.param]: err.msg })
+      prettyErrors.push({
+        title: `Invalid value in '${err.param}' parameter in '${err.location}' location`,
+        message: err.msg
+      })
     })
 
-    res.json({
+    return res.status(400).json({
       success: false,
       errors: prettyErrors
     })
