@@ -1,10 +1,13 @@
 import { Request, Response } from 'express'
+import { hash } from 'bcrypt'
 import User from '../models/User'
 import UserInterface from '../utils/interfaces/UserInterface'
 
 class UserController {
   public async list (req: Request, res: Response): Promise<Response> {
-    const users = await User.find().select('-password')
+    const users = await User.find()
+      .select('-password')
+      .sort({ _id: -1 })
 
     return res.status(200).json({
       success: true,
@@ -18,7 +21,7 @@ class UserController {
     const user: UserInterface = {
       name,
       email,
-      password,
+      password: await hash(password, 12),
       role
     }
 
@@ -47,7 +50,7 @@ class UserController {
     const user: UserInterface = {}
     if (email) user.email = email
     if (name) user.name = name
-    if (password) user.password = password
+    if (password) user.password = await hash(password, 12)
     if (role) user.role = role
 
     try {
