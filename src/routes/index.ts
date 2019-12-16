@@ -1,7 +1,2 @@
-import userRoutes from './UserRouter'
-import authRoutes from './AuthRouter'
-
-export default {
-  userRoutes,
-  authRoutes
-}
+export { default as userRoutes } from './UserRouter'
+export { default as authRoutes } from './AuthRouter'
