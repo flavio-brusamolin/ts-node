@@ -12,7 +12,7 @@ interface RequestWrapper extends Request {
 
 class Guard {
   public verifyToken (req: RequestWrapper, res: Response, next: NextFunction): Response|void {
-    let token = String(req.headers['x-access-token'] || req.headers.authorization)
+    let token = req.headers['x-access-token'] || req.headers.authorization
 
     if (!token) {
       return res.status(401).json({
@@ -23,6 +23,8 @@ class Guard {
         }]
       })
     }
+
+    token = String(token)
 
     if (token.startsWith('Bearer ')) {
       [, token] = token.split(' ')
