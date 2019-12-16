@@ -36,8 +36,8 @@ class Server {
   }
 
   public start (): void {
-    this.app.listen(8080, () => {
-      console.log('Node Server on 8080')
+    this.app.listen(process.env.PORT, () => {
+      console.log(`Node Server on ${process.env.PORT}`)
     })
   }
 }
