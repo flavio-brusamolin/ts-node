@@ -2,7 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
-import * as routes from './routes/index'
+import swagger from 'swagger-ui-express'
+import swaggerDocs from './docs/swagger'
+import * as routes from './app/routes/index'
 
 class Server {
   private app: express.Application
@@ -13,6 +15,7 @@ class Server {
     this.middlewares()
     this.database()
     this.routes()
+    this.docs()
   }
 
   private middlewares (): void {
@@ -33,6 +36,12 @@ class Server {
     for (const route in routes) {
       this.app.use(routes[route])
     }
+  }
+
+  private docs (): void {
+    this.app.use('/api-docs',
+      swagger.serve,
+      swagger.setup(swaggerDocs))
   }
 
   public start (): void {
