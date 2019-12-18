@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import swagger from 'swagger-ui-express'
 import swaggerDocs from './docs/swagger'
-import * as routes from './app/routes/index'
+import * as routes from './app/routes'
 
 class Server {
   private app: express.Application
